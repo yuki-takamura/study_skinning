@@ -9,8 +9,8 @@
 
 <script id="vs" type="x-shader/x-vertex">#version 300 es
   // 入力
-  in  vec3 position;
-  in  vec4 color;
+  layout (location = 0) in  vec3 position;
+  layout (location = 1) in  vec4 color;
   
   layout (std140) uniform scene {
     mat4 mVP;
@@ -27,6 +27,34 @@
   void main() {
     vColor = color;
     vec4 w_pos = u_obj.mWorld * vec4(position, 1.0);
+    gl_Position = u_scene.mVP * w_pos;
+  }
+</script>
+
+<script id="vs_skin" type="x-shader/x-vertex">#version 300 es
+  // スキンメッシュ
+  // 入力
+  layout (location = 0) in  vec3 position;
+  layout (location = 1) in  vec4 color;
+//  layout (location = 2) in  float weight0; // ボーン0の重み。ボーン1の重みは、1.0-weight0
+  
+  layout (std140) uniform scene {
+    mat4 mVP;
+  } u_scene;
+
+  layout (std140) uniform bone {
+    mat4 mWorld0;
+    mat4 mWorld1;
+  } u_obj;
+
+  
+  // 出力
+  out vec4 vColor;
+
+  void main() {
+    vColor = color;
+    vec4 w_pos = vec4(position, 1.0);
+//    w_pos = weight0 * (u_obj.mWorld0 * w_pos) + (1.0-weight0) * (u_obj.mWorld1 * w_pos);
     gl_Position = u_scene.mVP * w_pos;
   }
 </script>
