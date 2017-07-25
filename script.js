@@ -219,7 +219,7 @@ onload = function()
     var vMatrix = mat.create();
     var pMatrix = mat.create();
     var vpMatrix = mat.create();
-    var from = [0.0, 0.0, 2.0];
+    var from = [0.0, 0.0, 1.0];
     var lookat = [0.0, 0.0, 0.0];
     var up = [0.0, 1.0, 0.0];
     mat.lookAt(from, lookat, up, vMatrix);
@@ -242,7 +242,7 @@ onload = function()
     a_lMatrix[1]  = mat.identity(mat.create());
     a_wMatrix[0]  = mat.identity(mat.create());
     a_wMatrix[1]  = mat.identity(mat.create());
-    mat.translate(a_lMatrix[0], [0.0, -1.0, 0.0], a_lMatrix[0]);
+    mat.translate(a_lMatrix[0], [0.0, -0.5, 0.0], a_lMatrix[0]);
     mat.translate(a_bMatrix[1], [0.0, +0.5, 0.0], a_bMatrix[1]);
 
     gl.enable(gl.DEPTH_TEST);
