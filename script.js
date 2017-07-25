@@ -12,6 +12,7 @@ onload = function()
     var aAttribLoc = [];
     var aBlockIndex = [];
     var aUBO = [];
+    var aUniformLocation = [];
 
     var mat = new matIV();
     var a_bMatrix = [];// バインド行列
@@ -59,7 +60,10 @@ onload = function()
     gl.bindBufferBase(gl.UNIFORM_BUFFER, SHADER_BINDING_OBJECT, aUBO[1]);
     gl.bindBufferBase(gl.UNIFORM_BUFFER, SHADER_BINDING_BONE_OBJECT, aUBO[2]);
     gl.bindBufferBase(gl.UNIFORM_BUFFER, 3, aUBO[3]);
-    
+    aUniformLocation[0] = gl.getUniformLocation(prg_skin, 'mWorld0');
+    aUniformLocation[1] = gl.getUniformLocation(prg_skin, 'mWorld1');
+
+	
     // メッシュデータ生成
     var mesh_vbo = create_buffer_object(gl.ARRAY_BUFFER, new Float32Array([
       +0.0000, 0.0, +0.1000,  0.0, 0.0, 0.0, 1.0,  0.0,
@@ -282,11 +286,13 @@ onload = function()
       // モデル描画
       gl.useProgram(prg_skin);
 
-      gl.bindBuffer(gl.UNIFORM_BUFFER, aUBO[2]);
-      const aBone = new Float32Array(a_wMatrix[0].concat(a_wMatrix[1]));
-      gl.bufferData(gl.UNIFORM_BUFFER, aBone, gl.DYNAMIC_DRAW);
-      gl.bindBuffer(gl.UNIFORM_BUFFER, null);
-
+//      gl.bindBuffer(gl.UNIFORM_BUFFER, aUBO[2]);
+//      const aBone = new Float32Array(a_wMatrix[0].concat(a_wMatrix[1]));
+//      gl.bufferData(gl.UNIFORM_BUFFER, aBone, gl.DYNAMIC_DRAW);
+//      gl.bindBuffer(gl.UNIFORM_BUFFER, null);
+      gl.uniformMatrix4fv(aUniformLocation[0], false, a_wMatrix[0]);
+      gl.uniformMatrix4fv(aUniformLocation[1], false, a_wMatrix[1]);
+	    
       gl.bindBuffer(gl.ARRAY_BUFFER, mesh_vbo);
       gl.enableVertexAttribArray(aAttribLoc[2]);
       gl.enableVertexAttribArray(aAttribLoc[3]);
