@@ -1,5 +1,5 @@
 var getTime = function() {
-    return ( new Date().getTime() ) / 1000.0;
+    return new Date().getTime() / 1000.0;
 }
 
 onload = function()
@@ -219,7 +219,7 @@ onload = function()
     var vMatrix = mat.create();
     var pMatrix = mat.create();
     var vpMatrix = mat.create();
-    var from = [0.0, 0.1, 5.0];
+    var from = [0.0, 0.1, 2.0];
     var lookat = [0.0, 0.0, 0.0];
     var up = [0.0, 1.0, 0.0];
     mat.lookAt(from, lookat, up, vMatrix);
