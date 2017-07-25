@@ -56,7 +56,7 @@ onload = function()
     aUniformLocation[1] = gl.getUniformLocation(prg_skin, 'mWorld1');
 
 	
-    // メッシュデータ生成
+    // 円柱モデル生成
     var mesh_vbo = create_buffer_object(gl.ARRAY_BUFFER, new Float32Array([
     //    x,     y,     z,     R,   G,   B,   A,  weight
       +0.0000, 0.0, +0.1000,  0.0, 0.0, 1.0, 1.0,  1.0,
@@ -298,7 +298,6 @@ onload = function()
       
       gl.drawElements(gl.LINES, 420, gl.UNSIGNED_SHORT, 0);
       
-if(true){
       // 座標軸の表示
       gl.useProgram(prg);
       gl.bindBuffer(gl.ARRAY_BUFFER, axis_vbo);
@@ -338,7 +337,6 @@ if(true){
       gl.bufferData(gl.UNIFORM_BUFFER, mat.identity(mat.create()), gl.STATIC_DRAW);
       gl.bindBuffer(gl.UNIFORM_BUFFER, null);
       gl.drawArrays(gl.LINES, 0, 2);
-}
 
       // 後片付け
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
