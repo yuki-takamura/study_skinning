@@ -298,7 +298,21 @@ onload = function()
       
       gl.drawElements(gl.LINES, 420, gl.UNSIGNED_SHORT, 0);
       
-      // 座標軸の表示
+      draw_axis();// 座標系の表示
+      draw_bone();// ボーンの表示
+      
+      // 後片付け
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+      gl.bindBuffer(gl.ARRAY_BUFFER, null);
+      gl.flush();
+
+      lastTime = currentTime;
+      frames++;
+    })();
+	
+    // 座標系の表示
+    function draw_axis()
+    {
       gl.useProgram(prg);
       gl.bindBuffer(gl.ARRAY_BUFFER, axis_vbo);
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, axis_ibo);
@@ -317,8 +331,11 @@ onload = function()
       gl.bufferData(gl.UNIFORM_BUFFER, a_wMatrix[1], gl.DYNAMIC_DRAW);
       gl.bindBuffer(gl.UNIFORM_BUFFER, null);
       gl.drawElements(gl.LINES, 6, gl.UNSIGNED_SHORT, 0);
-      
-      // ボーンの表示
+    }
+
+    // ボーンの表示
+    function draw_bone()
+    {
       const vertexBuffer = gl.createBuffer();
       const colorBuffer = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
@@ -337,17 +354,9 @@ onload = function()
       gl.bufferData(gl.UNIFORM_BUFFER, mat.identity(mat.create()), gl.STATIC_DRAW);
       gl.bindBuffer(gl.UNIFORM_BUFFER, null);
       gl.drawArrays(gl.LINES, 0, 2);
+    }
 
-      // 後片付け
-      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
-      gl.bindBuffer(gl.ARRAY_BUFFER, null);
-      gl.flush();
-
-      lastTime = currentTime;
-      frames++;
-    })();
-
-	// バッファオブジェクトを生成する関数
+    // バッファオブジェクトを生成する関数
     function create_buffer_object(type, data){
       var vbo = gl.createBuffer();
       gl.bindBuffer(type, vbo);
