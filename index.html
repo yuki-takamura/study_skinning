@@ -51,7 +51,7 @@
   void main() {
     vColor = color;
     vec4 w_pos = vec4(position, 1.0);
-//    w_pos = weight0 * (mWorld0 * w_pos) + (1.0-weight0) * (mWorld1 * w_pos);
+    w_pos = weight0 * (mWorld0 * w_pos) + (1.0-weight0) * (mWorld1 * w_pos);
     gl_Position = u_scene.mVP * w_pos;
   }
 </script>
