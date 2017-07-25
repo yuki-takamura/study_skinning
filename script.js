@@ -219,11 +219,11 @@ onload = function()
     var vMatrix = mat.create();
     var pMatrix = mat.create();
     var vpMatrix = mat.create();
-    var from = [0.0, 0.1, 1.0];
+    var from = [0.0, 0.1, 5.0];
     var lookat = [0.0, 0.0, 0.0];
     var up = [0.0, 1.0, 0.0];
     mat.lookAt(from, lookat, up, vMatrix);
-    mat.perspective(70, canvas.width / canvas.height, 0.1, 100.0, pMatrix);
+    mat.perspective(40, canvas.width / canvas.height, 0.1, 100.0, pMatrix);
     mat.multiply(pMatrix, vMatrix, vpMatrix);
 
     // シーンの定数の設定
