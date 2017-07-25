@@ -16,6 +16,7 @@ onload = function()
 
     var mat = new matIV();
     var a_bMatrix = [];// バインド行列
+    var a_bMatrixInverse = [];// 逆バインド行列
     var a_lMatrix = [];// ローカル行列
     var a_wMatrix = [];// ワールド行列
     var vpMatrix;
@@ -38,8 +39,6 @@ onload = function()
     aAttribLoc[3] = gl.getAttribLocation(prg_skin, "color");
     aAttribLoc[4] = gl.getAttribLocation(prg_skin, "weight0");
 
-    gl.useProgram(prg);// シンプルなシェーダをディフォルトで使用
-   
     // シェーダ定数
     const SHADER_BINDING_SCENE = 0;
     const SHADER_BINDING_OBJECT = 1;
@@ -92,16 +91,16 @@ onload = function()
       -0.0951, 0.2, +0.0309,  0.0, 0.0, 1.0, 1.0,  1.0,
       -0.0588, 0.2, +0.0809,  0.0, 0.0, 1.0, 1.0,  1.0,
 
-      +0.0000, 0.3, +0.1000,  0.3, 0.0, 0.7, 1.0,  0.7,
-      +0.0588, 0.3, +0.0809,  0.3, 0.0, 0.7, 1.0,  0.7,
-      +0.0951, 0.3, +0.0309,  0.3, 0.0, 0.7, 1.0,  0.7,
-      +0.0951, 0.3, -0.0309,  0.3, 0.0, 0.7, 1.0,  0.7,
-      +0.0588, 0.3, -0.0809,  0.3, 0.0, 0.7, 1.0,  0.7,
-      +0.0000, 0.3, -0.1000,  0.3, 0.0, 0.7, 1.0,  0.7,
-      -0.0588, 0.3, -0.0809,  0.3, 0.0, 0.7, 1.0,  0.7,
-      -0.0951, 0.3, -0.0309,  0.3, 0.0, 0.7, 1.0,  0.7,
-      -0.0951, 0.3, +0.0309,  0.3, 0.0, 0.7, 1.0,  0.7,
-      -0.0588, 0.3, +0.0809,  0.3, 0.0, 0.7, 1.0,  0.7,
+      +0.0000, 0.3, +0.1000,  0.1, 0.0, 0.9, 1.0,  0.9,
+      +0.0588, 0.3, +0.0809,  0.1, 0.0, 0.9, 1.0,  0.9,
+      +0.0951, 0.3, +0.0309,  0.1, 0.0, 0.9, 1.0,  0.9,
+      +0.0951, 0.3, -0.0309,  0.1, 0.0, 0.9, 1.0,  0.9,
+      +0.0588, 0.3, -0.0809,  0.1, 0.0, 0.9, 1.0,  0.9,
+      +0.0000, 0.3, -0.1000,  0.1, 0.0, 0.9, 1.0,  0.9,
+      -0.0588, 0.3, -0.0809,  0.1, 0.0, 0.9, 1.0,  0.9,
+      -0.0951, 0.3, -0.0309,  0.1, 0.0, 0.9, 1.0,  0.9,
+      -0.0951, 0.3, +0.0309,  0.1, 0.0, 0.9, 1.0,  0.9,
+      -0.0588, 0.3, +0.0809,  0.1, 0.0, 0.9, 1.0,  0.9,
 
       +0.0000, 0.4, +0.1000,  0.4, 0.0, 0.6, 1.0,  0.6,
       +0.0588, 0.4, +0.0809,  0.4, 0.0, 0.6, 1.0,  0.6,
@@ -136,16 +135,16 @@ onload = function()
       -0.0951, 0.6, +0.0309,  0.6, 0.0, 0.4, 1.0,  0.4,
       -0.0588, 0.6, +0.0809,  0.6, 0.0, 0.4, 1.0,  0.4,
 
-      +0.0000, 0.7, +0.1000,  0.7, 0.0, 0.3, 1.0,  0.3,
-      +0.0588, 0.7, +0.0809,  0.7, 0.0, 0.3, 1.0,  0.3,
-      +0.0951, 0.7, +0.0309,  0.7, 0.0, 0.3, 1.0,  0.3,
-      +0.0951, 0.7, -0.0309,  0.7, 0.0, 0.3, 1.0,  0.3,
-      +0.0588, 0.7, -0.0809,  0.7, 0.0, 0.3, 1.0,  0.3,
-      +0.0000, 0.7, -0.1000,  0.7, 0.0, 0.3, 1.0,  0.3,
-      -0.0588, 0.7, -0.0809,  0.7, 0.0, 0.3, 1.0,  0.3,
-      -0.0951, 0.7, -0.0309,  0.7, 0.0, 0.3, 1.0,  0.3,
-      -0.0951, 0.7, +0.0309,  0.7, 0.0, 0.3, 1.0,  0.3,
-      -0.0588, 0.7, +0.0809,  0.7, 0.0, 0.3, 1.0,  0.3,
+      +0.0000, 0.7, +0.1000,  0.9, 0.0, 0.1, 1.0,  0.1,
+      +0.0588, 0.7, +0.0809,  0.9, 0.0, 0.1, 1.0,  0.1,
+      +0.0951, 0.7, +0.0309,  0.9, 0.0, 0.1, 1.0,  0.1,
+      +0.0951, 0.7, -0.0309,  0.9, 0.0, 0.1, 1.0,  0.1,
+      +0.0588, 0.7, -0.0809,  0.9, 0.0, 0.1, 1.0,  0.1,
+      +0.0000, 0.7, -0.1000,  0.9, 0.0, 0.1, 1.0,  0.1,
+      -0.0588, 0.7, -0.0809,  0.9, 0.0, 0.1, 1.0,  0.1,
+      -0.0951, 0.7, -0.0309,  0.9, 0.0, 0.1, 1.0,  0.1,
+      -0.0951, 0.7, +0.0309,  0.9, 0.0, 0.1, 1.0,  0.1,
+      -0.0588, 0.7, +0.0809,  0.9, 0.0, 0.1, 1.0,  0.1,
 
       +0.0000, 0.8, +0.1000,  1.0, 0.0, 0.0, 1.0,  0.0,
       +0.0588, 0.8, +0.0809,  1.0, 0.0, 0.0, 1.0,  0.0,
@@ -220,14 +219,14 @@ onload = function()
     var axis_ibo = create_buffer_object(gl.ELEMENT_ARRAY_BUFFER, new Int16Array([0,1, 2,3, 4,5]));
 
     // カメラ, 射影行列
-    var vMatrix = mat.create();
-    var pMatrix = mat.create();
-    var vpMatrix = mat.create();
     var from = [0.0, 0.1, 2.0];
     var lookat = [0.0, 0.0, 0.0];
     var up = [0.0, 1.0, 0.0];
+    var vMatrix = mat.create();
     mat.lookAt(from, lookat, up, vMatrix);
+    var pMatrix = mat.create();
     mat.perspective(40, canvas.width / canvas.height, 0.1, 100.0, pMatrix);
+    var vpMatrix = mat.create();
     mat.multiply(pMatrix, vMatrix, vpMatrix);
 
     // シーンの定数の設定
@@ -235,19 +234,18 @@ onload = function()
     gl.bufferData(gl.UNIFORM_BUFFER, vpMatrix, gl.DYNAMIC_DRAW);
     gl.bindBuffer(gl.UNIFORM_BUFFER, null);
 
-    gl.bindBuffer(gl.UNIFORM_BUFFER, aUBO[3]);
-    gl.bufferData(gl.UNIFORM_BUFFER, vpMatrix, gl.DYNAMIC_DRAW);
-    gl.bindBuffer(gl.UNIFORM_BUFFER, null);
-
     // メッシュの行列の初期化
     a_bMatrix[0]  = mat.identity(mat.create());
     a_bMatrix[1]  = mat.identity(mat.create());
+    a_bMatrixInverse[0]  = mat.identity(mat.create());
+    a_bMatrixInverse[1]  = mat.identity(mat.create());
     a_lMatrix[0]  = mat.identity(mat.create());
     a_lMatrix[1]  = mat.identity(mat.create());
     a_wMatrix[0]  = mat.identity(mat.create());
     a_wMatrix[1]  = mat.identity(mat.create());
-    mat.translate(a_lMatrix[0], [0.0, -0.5, 0.0], a_lMatrix[0]);
-    mat.translate(a_bMatrix[1], [0.0, +0.5, 0.0], a_bMatrix[1]);
+    mat.translate(a_lMatrix[0], [0.0, -0.5, 0.0], a_lMatrix[0]);// 少し下に下げる
+    mat.translate(a_bMatrix[1], [0.0, +0.5, 0.0], a_bMatrix[1]);// 骨はu方向に0.5
+    mat.inverse(a_bMatrix[1], a_bMatrixInverse[1]);// 逆行列を用意しておく
 
     gl.enable(gl.DEPTH_TEST);
     
@@ -269,12 +267,14 @@ onload = function()
       // モデルのローカル行列の更新
       mat.rotate(a_lMatrix[0], 10.0 * elapsedTime * Math.PI / 180, [0.0, 1.0, 0.0], a_lMatrix[0]);// src angle axis dest
       
+      // 間接で曲げる
       bend += 0.1 * elapsedTime;
       if(1.0 < bend) bend -= 1.0;
       var angle = 0.0;
-      if(bend < 0.25) {angle = bend * Math.PI;}
-      else if(bend < 0.50) {angle = (0.5 - bend) * Math.PI;}
+      if(bend < 0.25) {angle = bend * 2.0 * Math.PI;}
+      else if(bend < 0.50) {angle = (0.5 - bend) * 2.0 * Math.PI;}
       mat.rotate(a_bMatrix[1], angle, [1.0, 0.0, 0.0], a_lMatrix[1]);// src angle axis dest
+
       // モデルのワールド行列の生成
       a_wMatrix[0] = a_lMatrix[0];
       mat.multiply(a_wMatrix[0], a_lMatrix[1], a_wMatrix[1] );
@@ -282,10 +282,10 @@ onload = function()
       // モデル描画
       gl.useProgram(prg_skin);
 
-      // 【この行列の設定をどうにかする】
+      // 描画用行列の設定【この行列の設定をどうにかする】
       gl.uniformMatrix4fv(aUniformLocation[0], false, a_wMatrix[0]);
       gl.uniformMatrix4fv(aUniformLocation[1], false, a_wMatrix[0]);
-	    
+
       gl.bindBuffer(gl.ARRAY_BUFFER, mesh_vbo);
       gl.enableVertexAttribArray(aAttribLoc[2]);
       gl.enableVertexAttribArray(aAttribLoc[3]);
@@ -348,20 +348,20 @@ onload = function()
     })();
 
 	// バッファオブジェクトを生成する関数
-	function create_buffer_object(type, data){
-		var vbo = gl.createBuffer();
-		gl.bindBuffer(type, vbo);
-		gl.bufferData(type, data, gl.STATIC_DRAW);
-		gl.bindBuffer(type, null);
-		return vbo;
-	}
+    function create_buffer_object(type, data){
+      var vbo = gl.createBuffer();
+      gl.bindBuffer(type, vbo);
+      gl.bufferData(type, data, gl.STATIC_DRAW);
+      gl.bindBuffer(type, null);
+      return vbo;
+    }
 	
-	function load_shader(type, id){
+    function load_shader(type, id){
       var out = gl.createShader(type);
       gl.shaderSource(out, document.getElementById(id).textContent);
       gl.compileShader(out);
       console.log(gl.getShaderInfoLog(out));
       return out;
-	}
+    }
 	
 }
