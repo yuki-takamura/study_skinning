@@ -42,8 +42,10 @@
     mat4 mVP;
   } u_scene;
 
-  uniform mat4 mWorld0;
-  uniform mat4 mWorld1;
+  layout (std140) uniform bone {
+    mat4 mWorld0;
+    mat4 mWorld1;
+  } u_obj;
   
   // 出力
   out vec4 vColor;
@@ -52,8 +54,8 @@
     vColor = color;
     vec4 w_pos = vec4(position, 1.0);
     float weight1 = 1.0-weight0;
-    w_pos = weight0 * (mWorld0 * w_pos)
-          + weight1 * (mWorld1 * w_pos);
+    w_pos = weight0 * (u_obj.mWorld0 * w_pos)
+          + weight1 * (u_obj.mWorld1 * w_pos);
     gl_Position = u_scene.mVP * w_pos;
   }
 </script>
