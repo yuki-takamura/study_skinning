@@ -336,7 +336,7 @@ if(false){
         ]), gl.STATIC_DRAW);
       gl.vertexAttribPointer(aAttribLoc[1], 4, gl.FLOAT, false, 0, 0);
       gl.bindBuffer(gl.UNIFORM_BUFFER, aUBO[1]);
-      gl.bufferData(gl.UNIFORM_BUFFER, mat.identity(mat.create()), gl.DYNAMIC_DRAW);
+      gl.bufferData(gl.UNIFORM_BUFFER, mat.identity(mat.create()), gl.STATIC_DRAW);
       gl.bindBuffer(gl.UNIFORM_BUFFER, null);
       gl.drawArrays(gl.LINES, 0, 2);
 }
