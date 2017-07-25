@@ -280,7 +280,7 @@ onload = function()
 
       // 【この行列の設定をどうにかする】
       gl.uniformMatrix4fv(aUniformLocation[0], false, a_wMatrix[0]);
-      gl.uniformMatrix4fv(aUniformLocation[1], false, a_wMatrix[1]);
+      gl.uniformMatrix4fv(aUniformLocation[1], false, a_wMatrix[0]);
 	    
       gl.bindBuffer(gl.ARRAY_BUFFER, mesh_vbo);
       gl.enableVertexAttribArray(aAttribLoc[2]);
