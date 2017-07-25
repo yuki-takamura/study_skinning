@@ -22,12 +22,12 @@ onload = function()
 
     var vs = load_shader(gl.VERTEX_SHADER, "vs");
     var fs = load_shader(gl.FRAGMENT_SHADER, "fs");
-//    var prg = gl.createProgram();
-//    gl.attachShader(prg, vs);
-//    gl.attachShader(prg, fs);
-//    gl.linkProgram(prg);
-//    aAttribLoc[0] = gl.getAttribLocation(prg, "position");
-//    aAttribLoc[1] = gl.getAttribLocation(prg, "color");
+    var prg = gl.createProgram();
+    gl.attachShader(prg, vs);
+    gl.attachShader(prg, fs);
+    gl.linkProgram(prg);
+    aAttribLoc[0] = gl.getAttribLocation(prg, "position");
+    aAttribLoc[1] = gl.getAttribLocation(prg, "color");
 
     var vs_skin = load_shader(gl.VERTEX_SHADER, "vs_skin");
     var prg_skin = gl.createProgram();
@@ -36,30 +36,22 @@ onload = function()
     gl.linkProgram(prg_skin);
     aAttribLoc[2] = gl.getAttribLocation(prg_skin, "position");
     aAttribLoc[3] = gl.getAttribLocation(prg_skin, "color");
-//    aAttribLoc[4] = gl.getAttribLocation(prg_skin, "weight0");
+    aAttribLoc[4] = gl.getAttribLocation(prg_skin, "weight0");
 
-//    gl.useProgram(prg);// シンプルなシェーダをディフォルトで使用
+    gl.useProgram(prg);// シンプルなシェーダをディフォルトで使用
    
     // シェーダ定数
     const SHADER_BINDING_SCENE = 0;
     const SHADER_BINDING_OBJECT = 1;
     const SHADER_BINDING_BONE_OBJECT = 2;
-//    aBlockIndex[0] = gl.getUniformBlockIndex(prg, 'scene');
-//    aBlockIndex[1] = gl.getUniformBlockIndex(prg, 'object');
-    aBlockIndex[2] = gl.getUniformBlockIndex(prg_skin, 'bone');
-    aBlockIndex[3] = gl.getUniformBlockIndex(prg_skin, 'scene');
-//    gl.uniformBlockBinding(prg, aBlockIndex[0], SHADER_BINDING_SCENE);
-//    gl.uniformBlockBinding(prg, aBlockIndex[1], SHADER_BINDING_OBJECT);
-    gl.uniformBlockBinding(prg_skin, aBlockIndex[2], SHADER_BINDING_BONE_OBJECT);
-    gl.uniformBlockBinding(prg_skin, aBlockIndex[3], 3);
+    aBlockIndex[0] = gl.getUniformBlockIndex(prg, 'scene');
+    aBlockIndex[1] = gl.getUniformBlockIndex(prg, 'object');
+    gl.uniformBlockBinding(prg, aBlockIndex[0], SHADER_BINDING_SCENE);
+    gl.uniformBlockBinding(prg, aBlockIndex[1], SHADER_BINDING_OBJECT);
     aUBO[0] = gl.createBuffer();
     aUBO[1] = gl.createBuffer();
-    aUBO[2] = gl.createBuffer();
-    aUBO[3] = gl.createBuffer();
     gl.bindBufferBase(gl.UNIFORM_BUFFER, SHADER_BINDING_SCENE, aUBO[0]);
     gl.bindBufferBase(gl.UNIFORM_BUFFER, SHADER_BINDING_OBJECT, aUBO[1]);
-    gl.bindBufferBase(gl.UNIFORM_BUFFER, SHADER_BINDING_BONE_OBJECT, aUBO[2]);
-    gl.bindBufferBase(gl.UNIFORM_BUFFER, 3, aUBO[3]);
     aUniformLocation[0] = gl.getUniformLocation(prg_skin, 'mWorld0');
     aUniformLocation[1] = gl.getUniformLocation(prg_skin, 'mWorld1');
 
@@ -286,26 +278,22 @@ onload = function()
       // モデル描画
       gl.useProgram(prg_skin);
 
-//      gl.bindBuffer(gl.UNIFORM_BUFFER, aUBO[2]);
-//      const aBone = new Float32Array(a_wMatrix[0].concat(a_wMatrix[1]));
-//      gl.bufferData(gl.UNIFORM_BUFFER, aBone, gl.DYNAMIC_DRAW);
-//      gl.bindBuffer(gl.UNIFORM_BUFFER, null);
       gl.uniformMatrix4fv(aUniformLocation[0], false, a_wMatrix[0]);
       gl.uniformMatrix4fv(aUniformLocation[1], false, a_wMatrix[1]);
 	    
       gl.bindBuffer(gl.ARRAY_BUFFER, mesh_vbo);
       gl.enableVertexAttribArray(aAttribLoc[2]);
       gl.enableVertexAttribArray(aAttribLoc[3]);
-//      gl.enableVertexAttribArray(aAttribLoc[4]);
+      gl.enableVertexAttribArray(aAttribLoc[4]);
       var byteStride = 4*(3+4+1);
       gl.vertexAttribPointer(aAttribLoc[2], 3, gl.FLOAT, false, byteStride, 0);
       gl.vertexAttribPointer(aAttribLoc[3], 4, gl.FLOAT, false, byteStride, 4*3);
-//      gl.vertexAttribPointer(aAttribLoc[4], 1, gl.FLOAT, false, byteStride, 4*7);
+      gl.vertexAttribPointer(aAttribLoc[4], 1, gl.FLOAT, false, byteStride, 4*7);
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mesh_ibo);
       
       gl.drawElements(gl.LINES, 420, gl.UNSIGNED_SHORT, 0);
       
-if(false){
+if(true){
       // 座標軸の表示
       gl.useProgram(prg);
       gl.bindBuffer(gl.ARRAY_BUFFER, axis_vbo);
