@@ -36,7 +36,7 @@
   // 入力
   layout (location = 0) in  vec3 position;
   layout (location = 1) in  vec4 color;
-//  layout (location = 2) in  float weight0; // ボーン0の重み。ボーン1の重みは、1.0-weight0
+  layout (location = 2) in  float weight0; // ボーン0の重み。ボーン1の重みは、1.0-weight0
   
   layout (std140) uniform scene {
     mat4 mVP;
