@@ -219,7 +219,7 @@ onload = function()
     var vMatrix = mat.create();
     var pMatrix = mat.create();
     var vpMatrix = mat.create();
-    var from = [0.0, 0.0, 1.0];
+    var from = [0.0, 0.0, 2.0];
     var lookat = [0.0, 0.0, 0.0];
     var up = [0.0, 1.0, 0.0];
     mat.lookAt(from, lookat, up, vMatrix);
@@ -278,6 +278,7 @@ onload = function()
       // モデル描画
       gl.useProgram(prg_skin);
 
+      // 【この行列の設定をどうにかする】
       gl.uniformMatrix4fv(aUniformLocation[0], false, a_wMatrix[0]);
       gl.uniformMatrix4fv(aUniformLocation[1], false, a_wMatrix[1]);
 	    
