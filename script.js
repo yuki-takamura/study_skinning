@@ -283,8 +283,8 @@ onload = function()
       gl.useProgram(prg_skin);
 
       gl.bindBuffer(gl.UNIFORM_BUFFER, aUBO[2]);
-      gl.bufferData(gl.UNIFORM_BUFFER, [a_wMatrix[0],a_wMatrix[1]], gl.DYNAMIC_DRAW);
-//      gl.bufferData(gl.UNIFORM_BUFFER, a_wMatrix[1], gl.DYNAMIC_DRAW);
+      const aBone = new Float32Array(a_wMatrix[0].concat(a_wMatrix[1]));
+      gl.bufferData(gl.UNIFORM_BUFFER, aBone, gl.DYNAMIC_DRAW);
       gl.bindBuffer(gl.UNIFORM_BUFFER, null);
 
       gl.bindBuffer(gl.ARRAY_BUFFER, mesh_vbo);
